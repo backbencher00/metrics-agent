@@ -4,8 +4,7 @@ set -e  # stop on error
 
 echo "Installing Metrics Agent..."
 
-JAR_URL="https://github.com/backbencher00/metrics-agent/releases/download/V.1/MetricsTrackingAgent-1.0-SNAPSHOT.jar"
-
+JAR_URL="https://github.com/backbencher00/metrics-agent/releases/download/V.1/Metrics-tracking-agent-1.0-SNAPSHOT.jar"
 OS="$(uname)"
 
 if [[ "$OS" == "Darwin" ]]; then
