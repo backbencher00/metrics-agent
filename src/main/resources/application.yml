@@ -1,0 +1,11 @@
+agent_config:
+  organization:
+    org_name: "Sourabh-Lab"
+    org_id: "1234"
+  client:
+    client_id: "lvm-lab"
+    vm_id: "tent-env1"
+  monitoring:
+    mount_point_tracking:
+      - "/mnt/lvm-lab"
+      - "/mnt/lvm-lab2"
