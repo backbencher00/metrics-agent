@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 public class Main {
@@ -51,10 +50,6 @@ public class Main {
     // ─── Collect Metrics ────────────────────
     private static DiskMetrics collectMetrics() {
         try {
-//            Process process = Runtime.getRuntime().exec(
-//                    new String[]{"bash", "-c",
-//                            "df -h --output=size,used,avail,pcent / | tail -n 1"}
-//            );
 
             Process process = Runtime.getRuntime().exec(
                     new String[]{"bash", "-c",
@@ -106,15 +101,8 @@ public class Main {
             conn.setConnectTimeout(10000); // 10 sec
             conn.setReadTimeout(10000);
 
-            ObjectMapper mapper = new ObjectMapper();
-            String json = mapper.writeValueAsString(metrics);
             System.out.println(metrics);
-            System.out.println("📦 Payload: " + json);
-
-            OutputStream os = conn.getOutputStream();
-            os.write(json.getBytes());
-            os.flush();
-            os.close();
+            System.out.println("📦 Payload: " + toJson(metrics));
 
             int responseCode = conn.getResponseCode();
             System.out.println("📡 Response Code: " + responseCode);
@@ -136,5 +124,25 @@ public class Main {
             System.out.println("❌ Failed to push metrics:");
             e.printStackTrace();
         }
+    }
+
+    public static String toJson(DiskMetrics metrics) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        sb.append("\"total\":\"").append(escape(metrics.getTotalStorage())).append("\",");
+        sb.append("\"used\":\"").append(escape(metrics.getUsed())).append("\",");
+        sb.append("\"available\":\"").append(escape(metrics.getUsed())).append("\",");
+        sb.append("\"usage\":\"").append(escape(metrics.getUsagePercentage())).append("\"");
+        sb.append("}");
+        return sb.toString();
+    }
+    private static String escape(String value) {
+        if (value == null) return "";
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }
