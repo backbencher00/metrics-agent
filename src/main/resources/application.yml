@@ -1,11 +1,22 @@
-agent_config:
-  organization:
-    org_name: "Sourabh-Lab"
-    org_id: "1234"
-  client:
-    client_id: "lvm-lab"
-    vm_id: "tent-env1"
-  monitoring:
-    mount_point_tracking:
-      - "/mnt/lvm-lab"
-      - "/mnt/lvm-lab2"
+server:
+  port: 8329
+
+agent-config:
+  org-id: "1234"
+  client-id: "lvm-lab"
+  vm-id: "tent-env1"
+  agent-id: "123445"
+  monitor:
+    mount-points:
+      - "/mnt/machines/c1-vm-1"
+      - "/tmp"
+
+metrics:
+  backend:
+    base-url: "http://localhost:3117"
+    api-key: ""
+
+agent:
+  agent-version: 1.0.2
+  last-atomic-number-seen: 0
+  poll-interval-ms: 10000
