@@ -1,0 +1,7 @@
+# /etc/spm-agent/config.yaml
+agent_version: "{{ agent_version }}"
+hostname: "{{ inventory_hostname }}"
+backend_url: "https://api.yourmonitoring.com/v1/metrics"
+auth:
+  jwt_token: "{{ vault_agent_jwt }}"  # Injected from Vault
+collection_interval: 1s
