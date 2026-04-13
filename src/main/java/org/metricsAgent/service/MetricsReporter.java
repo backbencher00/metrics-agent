@@ -7,6 +7,7 @@ import org.metricsAgent.LVMstoragePool.MountDetail;
 import org.metricsAgent.LVMstoragePool.UnmountedDevice;
 import org.metricsAgent.client.MetricsServiceClient;
 import org.metricsAgent.config.AgentConfig;
+import org.metricsAgent.config.AgentProperties;
 import org.metricsAgent.devicesCollectors.BackingDeviceCollector;
 import org.metricsAgent.devicesCollectors.BlockDeviceCollector;
 import org.metricsAgent.enums.DeviceType;
@@ -35,10 +36,8 @@ import java.util.stream.Collectors;
 @Service
 public class MetricsReporter {
 
-    @Value("${agent.agent-version}")
-    private String agentVersion;
-
-    private static final int POLL_INTERVAL_MS = 10_000;
+    @Autowired
+    private AgentProperties agentProperties;
 
     @Autowired
     private MetricsStateHolder stateHolder;
@@ -62,7 +61,7 @@ public class MetricsReporter {
 
     // ── Report every 30s ──────────────────────────────────────────────────────
 
-    @Scheduled(fixedDelay = 30_000)
+    @Scheduled(fixedDelay = 10_000)
     public void reportMetrics() {
         try {
             MetricsAgentResponse payload = assemblePayload();
@@ -72,8 +71,6 @@ public class MetricsReporter {
             log.error("Failed to assemble or send metrics report", e);
         }
     }
-
-    // ── Payload assembly ──────────────────────────────────────────────────────
 
     private MetricsAgentResponse assemblePayload() {
         List<MountDetail> mounts = assembleMountDetails();
@@ -92,7 +89,7 @@ public class MetricsReporter {
                 .agentId(agentContext.getAgentId())
                 .sentAt(System.currentTimeMillis())
                 .sequenceNumber(sequenceNumber.getAndIncrement())
-                .pollIntervalMs(POLL_INTERVAL_MS)
+                .pollIntervalMs(agentProperties.getPollIntervalMs())
                 .surgeTriggered(surgeTriggered)
                 .vmLevelMetrics(vmMetrics)
                 .build();
@@ -229,7 +226,7 @@ public class MetricsReporter {
                 .vmId(agentContext.getVmId())
                 .hostname(resolveHostname())
                 .collectedAt(System.currentTimeMillis())
-                .agentVersion(agentVersion)
+                .agentVersion(agentProperties.getAgentVersion())
                 .mounts(mounts)
                 .unmountedDevices(unmountedDevices)
                 .totalReadIops(totalReadIops)

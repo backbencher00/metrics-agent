@@ -2,13 +2,12 @@ server:
   port: 8329
 
 agent-config:
-  org-id: "1234"
-  client-id: "lvm-lab"
-  vm-id: "tent-env1"
-  agent-id: "123445"
+  org-id: "default"
+  client-id: "default"
+  vm-id: "default"
+  agent-id: "default"
   monitor:
     mount-points:
-      - "/mnt/machines/c1-vm-1"
       - "/tmp"
 
 metrics:
@@ -17,6 +16,6 @@ metrics:
     api-key: ""
 
 agent:
-  agent-version: 1.0.2
+  agent-version: 1.0.3
   last-atomic-number-seen: 0
   poll-interval-ms: 10000

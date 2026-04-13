@@ -17,8 +17,6 @@ import java.util.Map;
 @Service
 public class IoMetricsCollector {
 
-    // Sector size in /proc/diskstats is ALWAYS 512 bytes regardless of
-    // physical sector size (4K drives still report in 512-byte units here)
     private static final int SECTOR_SIZE_BYTES = 512;
 
 

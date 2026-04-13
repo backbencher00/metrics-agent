@@ -9,11 +9,11 @@ import java.util.Deque;
 @Slf4j
 public class SurgeMetricsCollector {
 
-    private static final int    BASELINE_WINDOW_SEC = 60;
+    private static final int    BASELINE_WINDOW_SEC = 3600;  // 1 hour rolling window
     private static final double DEFAULT_SURGE_THRESHOLD = 2.0;
     private static final int    SECTOR_SIZE_BYTES = 512;
 
-    // Circular buffers — one per device, 60 slots (1 per second)
+    // Circular buffers — one per device, 3600 slots (1 per tick over 1 hour)
     private final Deque<Long> readSamples  = new ArrayDeque<>(BASELINE_WINDOW_SEC);
     private final Deque<Long> writeSamples = new ArrayDeque<>(BASELINE_WINDOW_SEC);
 

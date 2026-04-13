@@ -48,6 +48,19 @@ public class BackingDeviceCollector {
                     .build());
         }
 
+        // Check for both the mapper path and the direct Device Mapper name
+        if (rawDevice.startsWith("mapper/") || rawDevice.startsWith("dm-")) {
+            try {
+                Path linkPath = Paths.get("/dev/" + rawDevice);
+                if (Files.exists(linkPath)) {
+                    // Resolves either path to the canonical "dm-X" name
+                    rawDevice = linkPath.toRealPath().getFileName().toString();
+                }
+            } catch (IOException e) {
+                log.warn("Failed to resolve LVM/DM path: {}", rawDevice);
+            }
+        }
+
         List<BackingDevice> result = new ArrayList<>();
 
 

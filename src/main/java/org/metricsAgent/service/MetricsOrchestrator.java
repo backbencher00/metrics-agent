@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @RequiredArgsConstructor
 public class MetricsOrchestrator {
 
-    private static final int INTERVAL_SEC = 10;
+    private static final int INTERVAL_SEC = 2;  // IO delta interval — must match fixedDelay below
 
     @Autowired
     AgentConfig agentConfig;
@@ -96,7 +96,7 @@ public class MetricsOrchestrator {
     //
     // Covers ALL devices in /proc/diskstats — mounted and unmounted.
     // The reporter decides what to do with unmounted device IO (e.g. raw block access).
-    @Scheduled(fixedDelay = 10_000)
+    @Scheduled(fixedDelay = 2_000)  // Sample IO every 2s — faster than the 10s reporting interval
     public void collectIoAndSurgeMetrics() {
         try {
             Map<String, IoMetricsCollector.IoRawSnapshot> current  = ioCollector.collectRawSnapshots();
